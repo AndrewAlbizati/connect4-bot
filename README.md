@@ -1,0 +1,1 @@
+This bot requires guild member intent.
