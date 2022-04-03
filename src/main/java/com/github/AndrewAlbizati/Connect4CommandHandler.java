@@ -25,6 +25,7 @@ public class Connect4CommandHandler implements SlashCommandCreateListener {
             return;
         }
 
+        // Get the player being challenged
         User player2 = interaction.getOptionUserValueByIndex(0).orElse(null);
         if (player2 == null || interaction.getUser().getId() == player2.getId() || player2.isBot()) {
             interaction.createImmediateResponder()
@@ -36,11 +37,30 @@ public class Connect4CommandHandler implements SlashCommandCreateListener {
 
         Game game = new Game(interaction.getUser(), player2);
 
+        // Check if either of the players are already playing a game of Connect4
+        for (Long id : games.keySet()) {
+            if (games.get(id).getPlayer1().getId() == game.getPlayer1().getId() || games.get(id).getPlayer2().getId() == game.getPlayer1().getId()) {
+                interaction.createImmediateResponder()
+                        .setContent("Please finish your previous game before starting a new game.")
+                        .setFlags(InteractionCallbackDataFlag.EPHEMERAL)
+                        .respond();
+                return;
+            }
+            if (games.get(id).getPlayer1().getId() == game.getPlayer2().getId() || games.get(id).getPlayer2().getId() == game.getPlayer2().getId()) {
+                interaction.createImmediateResponder()
+                        .setContent("The user you challenged needs to finish their previous game before starting a new game.")
+                        .setFlags(InteractionCallbackDataFlag.EPHEMERAL)
+                        .respond();
+                return;
+            }
+        }
+
+        // Create game message
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle("Connect4");
         eb.setDescription(game.toString());
         eb.setColor(Color.YELLOW);
-        eb.setFooter(game.getPlayer1().getDiscriminatedName() + " vs " + game.getPlayer2().getDiscriminatedName());
+        eb.setFooter(game.getPlayer1().getDiscriminatedName() + "'s turn");
 
         Message message = interaction.createImmediateResponder()
                 .addEmbed(eb)
@@ -59,6 +79,9 @@ public class Connect4CommandHandler implements SlashCommandCreateListener {
                         )
                 )
                 .respond().join().update().join();
+
+        // Inform the challenged player of the game
+        game.getPlayer2().sendMessage(game.getPlayer1().getMentionTag() + " has challenged you to a game of Connect4! Go to <#" + interaction.getChannel().get().getIdAsString() + "> to play.");
 
         games.put(message.getId(), game);
     }

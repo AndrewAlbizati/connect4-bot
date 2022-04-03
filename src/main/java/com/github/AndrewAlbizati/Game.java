@@ -37,6 +37,11 @@ public class Game {
         return currentTurn;
     }
 
+    /**
+     * Switch the player who is allowed to place a tile.
+     * Player1 --> Player2
+     * Player2 --> Player1
+     */
     public void alternateTurn() {
         if (currentTurn == player1) {
             currentTurn = player2;
@@ -45,10 +50,15 @@ public class Game {
         }
     }
 
-    public boolean placeTile(int pos) {
+    /**
+     * Places a tile on the board and alternates the player who is allowed to place a tile.
+     * The turn isn't alternated if the tile is placed out of bounds.
+     * @param pos The column of the tile.
+     */
+    public void placeTile(int pos) {
         int r = 0;
         if (board[r][pos] != Tile.EMPTY) {
-            return false;
+            return;
         }
 
         while (inBounds(r + 1, pos) && board[r + 1][pos] == Tile.EMPTY) {
@@ -61,13 +71,22 @@ public class Game {
             board[r][pos] = Tile.RED;
         }
         alternateTurn();
-        return true;
     }
 
+    /**
+     * Test if a position on the board will raise an ArrayIndexOutOfBoundsException.
+     * @param r Row of tile.
+     * @param c Column of tile.
+     * @return If the position is valid or not.
+     */
     private boolean inBounds(int r, int c) {
         return (r >= 0 && c >= 0) && (r < board.length && c < board[0].length);
     }
 
+    /**
+     * Determines if a player has 4 tiles in a row, either across, vertical, or diagonal.
+     * @return The User who was won, or null if no winner.
+     */
     public User getWinner() {
         // Check for 4 across
         for (int row = 0; row < board.length; row++){
@@ -116,6 +135,10 @@ public class Game {
         return null;
     }
 
+    /**
+     * Determines if the board has been completely filled with non-empty tiles.
+     * @return If the board is completely filled.
+     */
     public boolean isFilled() {
         for (int r = 0; r < board.length; r++) {
             for (int c = 0; c < board[r].length; c++) {
@@ -127,6 +150,10 @@ public class Game {
         return true;
     }
 
+    /**
+     * Shows the board as well as the column numbers.
+     * @return A square of Discord emojis representing the board.
+     */
     public String toString() {
         StringBuilder builder = new StringBuilder();
         for (int r = 1; r <= board[0].length; r++) {
