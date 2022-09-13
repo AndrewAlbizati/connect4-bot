@@ -16,8 +16,8 @@ token={Discord bot token}
 4. If on macOS/Linux, run the following into a terminal: 
    1. `chmod +x gradlew` 
    2. `./gradlew build`
-   3. `mv build/libs/blackjackbot-1.0.0.jar .`
-   4. `java -jar blackjackbot-1.0.0.jar`
+   3. `mv build/libs/connect4bot-1.0.0.jar .`
+   4. `java -jar connect4bot-1.0.0.jar`
 
 ## How to play
 To play Connect4, type `/connect4 <user>` in any channel that the bot is allowed to read and send messages. The user who sent the command will have the first turn. Click on the buttons 1-7 to place a tile in the numbered columns.
