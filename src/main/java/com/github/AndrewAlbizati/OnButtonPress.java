@@ -30,7 +30,7 @@ public class OnButtonPress implements MessageComponentCreateListener {
                     .setEmbed(interaction.getMessage().getEmbeds().get(0).toBuilder()
                             .setDescription(game.toString())
                             .setColor(game.getCurrentTurn() == game.getPlayer1() ? Color.RED : Color.YELLOW)
-                            .setFooter(game.getCurrentTurn() == game.getPlayer1() ? game.getPlayer1().getDiscriminatedName() : game.getPlayer2().getDiscriminatedName() + " has forfeited!")
+                            .setFooter((game.getCurrentTurn() == game.getPlayer1() ? game.getPlayer1().getDiscriminatedName() : game.getPlayer2().getDiscriminatedName()) + " has forfeited!")
                     ).removeAllComponents()
                     .applyChanges();
             interaction.acknowledge();
